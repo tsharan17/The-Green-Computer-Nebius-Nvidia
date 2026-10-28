@@ -9,6 +9,55 @@ real where you can, and export what you decided.
 It runs entirely on your own machine. NVIDIA GPUs, Nebius cloud jobs and an AI assistant are
 optional accelerators, never requirements.
 
+## Nebius x NVIDIA Global AI Hackathon submission
+
+| | |
+|---|---|
+| **Track** | Best Apps and Agents |
+| **Live demo** | https://green-computer-7yy6xwxdna-ue.a.run.app (free, no payment, no email confirmation; stays up until judging ends). Two-minute tour: [docs/for-judges.md](docs/for-judges.md) |
+| **Runs on Token Factory** | Runtime calls to the Nebius Token Factory inference API, using **NVIDIA Nemotron** models (Ultra, Super, Nano) |
+| **Other services** | **Tavily** (runtime datasheet search, for the Best Use of Tavily award). Nebius Serverless Jobs / Endpoints: built, not run live (see the status table) |
+| **Licence** | Apache-2.0 |
+| **Started** | 13 October 2026, inside the submission period (26 August to 30 October 2026): a new project, not an update of an older one. The full commit history is in this repository |
+
+### Where Nemotron and Token Factory are used
+
+| Nemotron model on Token Factory | Job | Why that model | Code |
+|---|---|---|---|
+| **Nemotron 3 Ultra** | Green Agent: plans, calls the engine as tools, explains results | Serious multi-step reasoning and tool use | `backend/app/agent/` |
+| **Nemotron 3 Super** | AI candidates: extra change ideas as schema-checked JSON | Mid-weight reasoning at lower cost | `backend/app/agent/recommender.py` |
+| **Nemotron 3 Nano** | Datasheet import: pulls specs from pages Tavily found | Fast, cheap extraction | `backend/app/agent/datasheet.py` |
+
+Token Factory is what makes the assistant usable for a physics tool: tool-calling Nemotron answers
+by asking the deterministic engine, and a guardrail rejects any number that is not in a tool
+result. Live results and the failures we fixed are in the status table and in
+[docs/for-judges.md](docs/for-judges.md).
+
+### How this maps to the judging criteria
+
+- **Technological implementation.** A deterministic engine (per-layer roofline, coupled
+  power / temperature / throttling solve, uncertainty bands, constraint search), a digital-twin
+  execution trace, accounts with tenant isolation, and a three-model Nemotron layer with output
+  validation (JSON repair, one retry, number guardrail). Tested by a backend suite, 15 Playwright
+  journeys with axe accessibility checks, and an acceptance script
+  (see [Checks](#checks)). Architecture: [docs/architecture.md](docs/architecture.md).
+- **Design.** One numbered path (Inputs, Verification, Analysis, Recommendations, Validation,
+  Export) with a stepper and Back / Next on every page, example projects, light and dark themes,
+  and plain-language "planned" messages instead of fake success for unsupported inputs.
+- **Potential impact.** Engineers putting AI on robots and edge devices find out late that the model
+  overheats, throttles or blows the power budget. Here they see it before buying or building, get
+  ranked fixes, and export a report and a recipe. The bundled example (YOLOv8s on a Jetson Orin NX)
+  fails today and a recommended plan meets every requirement with about 59% less power.
+- **Quality of the idea.** The language model is deliberately *not* the source of any number: it
+  explains and proposes, and the engine evaluates. Every metric carries a range and a provenance
+  (predicted, calibrated, measured), and predictions are never shown as measurements.
+
+### Be straight with judges
+
+No Jetson, GPU or power measurement exists yet, so Jetson results are analytical predictions with
+stated ranges. Nebius Serverless Jobs and Endpoints are not run live. The full table is under
+[What is and is not verified](#what-is-and-is-not-verified).
+
 ## Start it
 
 - **Windows:** double-click **`Start The Green Computer.bat`** in this folder.

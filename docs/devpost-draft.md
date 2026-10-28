@@ -5,7 +5,7 @@ Edit the bracketed parts after you have run the live checks. Do not claim anythi
 **Project name:** The Green Computer
 **Tagline:** Predict. Optimise. Verify. Make every computation count.
 **Track:** Best Apps and Agents
-**Demo URL:** https://green-computer-7yy6xwxdna-ue.a.run.app  **Code:** https://github.com/tsharan17/The-Green-Computer (must be public, Apache-2.0 shown in the About section)
+**Demo URL:** https://green-computer-7yy6xwxdna-ue.a.run.app  **Code:** https://github.com/tsharan17/The-Green-Computer-Nebius-Nvidia (must be public, Apache-2.0 shown in the About section)
 **Video:** [YouTube link, public, under 3 minutes]
 
 ## Inspiration
