@@ -34,7 +34,7 @@ Predict latency, power, heat, throttling, cost and carbon. Get ranked fixes. Ver
 
 [The problem](#the-problem) · [See it](#see-it) · [Try it live](#try-it-live-in-two-minutes) ·
 [Nemotron and Token Factory](#built-on-nvidia-nemotron-and-nebius-token-factory) ·
-[Why it is different](#why-it-is-different) · [Features](#features) · [How it works](#how-it-works) ·
+[Why it is different](#why-it-is-different) · [Innovation](#why-it-is-innovative) · [Recommendations](#recommendations-see-the-impact-of-every-change) · [Features](#features) · [How it works](#how-it-works) ·
 [Run it yourself](#run-it-yourself) · [Tests](#tests) · [Status](#what-is-and-is-not-verified) ·
 [Tech stack](#tech-stack) · [Licence](#licence)
 
@@ -149,6 +149,65 @@ and off by default (`GC_ENABLE_NEBIUS=0`).
     <td width="25%" valign="top"><h3>🚧 Clear about gaps</h3>Unsupported inputs (schematic, PCB, RTL, netlist, assembly) get a "planned" message naming the format needed, never a fake success. Requirements are never loosened to pass.</td>
   </tr>
 </table>
+
+## Why it is innovative
+
+Most tools answer one question about one layer: a profiler measures a model on hardware you already
+own, a simulator models a chip, a spreadsheet adds up watts. The Green Computer closes the loop across
+all of them **before the hardware exists**, in a single path.
+
+| | Typical tools | **The Green Computer** |
+|---|---|---|
+| **When you learn about heat and throttling** | After you buy and run the board | Before: power, temperature and throttling are solved together |
+| **Scope** | One layer: the model, or the runtime, or the chip | Model, software, hardware settings, board and cooling choice in one search |
+| **What you get** | A number, or a dashboard | A verdict, the limiting factor, ranked fixes, and the re-analysed result of each |
+| **Trust** | A single figure | A `low..high` range with provenance on every metric; predicted and measured never mixed |
+| **Role of AI** | Often a chatbot that may invent figures | Nemotron explains and proposes; a guardrail rejects any number the engine did not compute |
+| **Vendor lock-in** | Tied to one vendor's silicon | Vendor-neutral library of boards, MCUs, FPGAs and accelerators, or describe your own |
+| **Outcome** | Insight | A report, a plan and a recipe of scripts you can act on |
+
+What is new, in one line: **a co-design loop where a language model proposes ideas but a deterministic
+physics engine evaluates every one of them, so each recommendation arrives with its measured-style
+before/after, not a guess.** (We make no claim that nothing similar exists anywhere; this is the
+combination we built and verified, with its limits stated below.)
+
+## Recommendations: see the impact of every change
+
+Recommendations are the heart of the app. Nothing is suggested without being **evaluated**: click any
+change and the engine re-runs the whole analysis with it applied, so you see the consequence on your
+system, not a rule of thumb.
+
+```mermaid
+flowchart LR
+    A[Today's setup<br/>❌ fails] --> B[Ranked changes<br/>5 levels]
+    B -->|click one| C[Engine re-runs<br/>the full analysis]
+    C --> D[New verdict +<br/>what moved]
+    D --> E[Same four figures<br/>today vs with the change]
+    E -->|combine changes| F[Plan: each alone<br/>vs together vs today]
+    F --> G[Export report<br/>+ recipe scripts]
+```
+
+| Level | Example changes | What you see change |
+|---|---|---|
+| 🧠 **The AI model** | Quantise (FP16 / INT8), prune, smaller input, a lighter model | Energy, throughput, accuracy risk |
+| ⚙️ **How it runs** | Batch size, scheduling | Latency, throughput, memory |
+| 🎛️ **Hardware settings** | Power mode, clocks | Power, temperature, throttling |
+| 🔌 **Hardware or cooling** | Another board, a bigger heatsink or fan | Steady-state temperature, headroom |
+| 💡 **Chip and board ideas** | Directional what-ifs, labelled as such | Direction of change only |
+
+**What the impact view shows, for each change you try:**
+
+- the **new verdict** (fails to passes, or what still fails and why),
+- **what moves**: latency, energy per input, power, peak temperature, throttling, cost and carbon,
+- the **same four figures side by side, today and with the change**: board heat map, warm-up curve,
+  where the energy goes, and power over a batch,
+- a **confidence level** and the range on every number.
+
+In the bundled example the top-ranked plan turns a failing Jetson Orin NX into a pass with
+**-72% energy and about 59% less power**, and the plan builder shows each change alone and all of
+them together against today. Changes are ranked to fix failing requirements first, then your
+priority, and each unit of engineering effort costs a little in the ranking so a physical change has
+to earn its place. Requirements are never loosened to make a result pass.
 
 ## Features
 
