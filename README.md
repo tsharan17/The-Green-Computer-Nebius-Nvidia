@@ -58,6 +58,27 @@ person confirms them. Model ids are matched against the provider's own model lis
 (`GC_MODEL_ULTRA`, `GC_MODEL_SUPER`, `GC_MODEL_NANO` override them). All three are live in the
 [hosted demo](https://green-computer-7yy6xwxdna-ue.a.run.app).
 
+### Where Token Factory helped
+
+- **No GPU needed to use Nemotron.** The project was built on a machine without an NVIDIA GPU; Token
+  Factory served Ultra, Super and Nano through one OpenAI-compatible endpoint, so the assistant,
+  candidate generation and datasheet extraction run from any laptop or from the Cloud Run demo.
+- **Right-sized models.** Ultra handles the multi-step tool-calling agent (a short reply took about
+  1.4 s in our tests); Super generates candidates (12 to 21 s for six); Nano extracts datasheet values
+  (45 to 60 s for the whole search-and-extract import, including Tavily). Credits go to the model that
+  needs them.
+- **Swappable.** `TOKEN_FACTORY_BASE_URL` and the `GC_MODEL_*` settings point the same code at any
+  OpenAI-compatible endpoint. `scripts/check_nebius.py` verifies chat and a tool-call round trip.
+
+### Services used
+
+| Service | Use | Status |
+|---|---|---|
+| Nebius Token Factory + NVIDIA Nemotron (Ultra, Super, Nano) | Agent, candidates, datasheet extraction | Live, verified 27 Oct 2026 |
+| Tavily | Datasheet search for hardware not in the library | Live, verified 27 Oct 2026 |
+| Nebius Serverless Jobs (NVIDIA GPUs) | Real benchmarks for calibration (`bench/`, `GC_ENABLE_NEBIUS=1`) | Built, not run live |
+| Nebius Serverless Endpoints | Hosting the app ([deploy/endpoint.md](deploy/endpoint.md)) | Built, not run live |
+
 **Nebius AI Cloud.** Serverless Jobs (real GPU benchmarks for calibration) and Serverless Endpoints
 (to host the app) are built and documented in [docs/connecting-nebius.md](docs/connecting-nebius.md)
 and [deploy/endpoint.md](deploy/endpoint.md). They are off by default (`GC_ENABLE_NEBIUS=0`) and have
