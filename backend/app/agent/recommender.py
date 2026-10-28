@@ -15,7 +15,7 @@ import json
 import re
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from app.agent import guardrail
 from app.agent.client import LLM, ChatReply, LLMError
@@ -52,6 +52,24 @@ class Candidate(BaseModel):
     affects: list[str] = Field(default_factory=list, max_length=8)
     tradeoffs: list[str] = Field(default_factory=list, max_length=6)
     requires: list[str] = Field(default_factory=list, max_length=6)
+
+    @field_validator("affects", "tradeoffs", "requires", mode="before")
+    @classmethod
+    def _as_short_list(cls, v: Any, info: Any) -> Any:
+        """Models often send one string where a list is asked for, or an over-long list: accept both."""
+        limit = {"affects": 8, "tradeoffs": 6, "requires": 6}[info.field_name]
+        if v is None:
+            return []
+        if isinstance(v, str):
+            v = [v]
+        return [str(x) for x in v][:limit] if isinstance(v, (list, tuple)) else v
+
+    @field_validator("title", "problem", "rationale", "area", mode="before")
+    @classmethod
+    def _clip(cls, v: Any, info: Any) -> Any:
+        """An over-long text is cut rather than failing the whole reply."""
+        limit = {"title": 160, "problem": 500, "rationale": 900, "area": 40}[info.field_name]
+        return v[:limit] if isinstance(v, str) else v
 
 
 class Reply(BaseModel):
@@ -110,7 +128,20 @@ def parse(content: str) -> Reply:
     if start < 0 or end <= start:
         raise LLMError("the model did not return a JSON object")
     try:
-        return Reply.model_validate(loads_lenient(text[start : end + 1]))
+        doc = loads_lenient(text[start : end + 1])
+        raw = doc.get("candidates") if isinstance(doc, dict) else None
+        if not isinstance(raw, list):
+            raise ValueError("no candidates list")
+        good: list[Candidate] = []
+        first_error = ""
+        for item in raw[:12]:  # one malformed candidate is dropped, not the whole reply
+            try:
+                good.append(Candidate.model_validate(item))
+            except ValidationError as e:
+                first_error = first_error or str(e)[:200]
+        if raw and not good:
+            raise ValueError(first_error)
+        return Reply(summary=str(doc.get("summary") or "")[:800], candidates=good)
     except (ValueError, ValidationError) as e:
         raise LLMError(f"the model's reply did not match the expected schema: {str(e)[:200]}") from e
 
