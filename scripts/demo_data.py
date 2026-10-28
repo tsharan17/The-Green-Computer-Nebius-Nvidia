@@ -35,7 +35,7 @@ def call(method: str, path: str, body=None):
 
 
 def main() -> int:
-    code, _ = call("POST", "/auth/signup", {"email": EMAIL, "password": PASSWORD, "display_name": "Demo"})
+    code, _ = call("POST", "/auth/signup", {"email": EMAIL, "password": PASSWORD, "display_name": "Demo", "accept_terms": True})
     if code == 409:
         code, _ = call("POST", "/auth/signin", {"email": EMAIL, "password": PASSWORD})
     if code not in (200, 201):
