@@ -76,7 +76,7 @@ def main() -> int:
 
     code, _, _ = call("GET", "/projects")
     step("data needs an account", code == 401)
-    code, me, _ = call("POST", "/auth/signup", {"email": EMAIL, "password": PASSWORD})
+    code, me, _ = call("POST", "/auth/signup", {"email": EMAIL, "password": PASSWORD, "accept_terms": True})
     if not step("a visitor can create an account", code == 201 and bool(me), EMAIL):
         return 1
 

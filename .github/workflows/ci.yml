@@ -70,6 +70,7 @@ jobs:
         with: { python-version: "3.12" }
       - uses: actions/setup-node@v4
         with: { node-version: "20" }
-      - run: pip install -e "backend[postgres]" pip-audit
-      - run: pip-audit --skip-editable --strict
+      - run: python -m pip install --upgrade pip && pip install -e "backend[postgres]" pip-audit
+      # --strict is left off: it turns the skipped editable app package into a failure. Findings still fail.
+      - run: pip-audit --skip-editable
       - run: cd frontend && npm ci && npm audit --omit=dev --audit-level=high
