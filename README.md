@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/images/logo.svg" alt="The Green Computer logo" width="96" height="96">
+<img src="docs/images/banner.svg" alt="The Green Computer: The Sustainable Tech of 21st Century" width="100%">
 
 # The Green Computer
 
@@ -23,6 +23,19 @@ Predict latency, power, heat, throttling, cost and carbon. Get ranked fixes. Ver
 **[Two-minute tour](docs/demo-guide.md)** ·
 **[Architecture](docs/architecture.md)** ·
 **[Run it yourself](#run-it-yourself)**
+
+<table>
+  <tr>
+    <td align="center" width="25%"><h3>🔮 Predict</h3><sub>Power, heat and throttling solved together, <b>before the hardware exists</b></sub></td>
+    <td align="center" width="25%"><h3>💡 Recommend</h3><sub>Ranked fixes across model, software, settings, board and cooling</sub></td>
+    <td align="center" width="25%"><h3>⚡ See the impact</h3><sub>Click a change: the engine <b>re-runs everything</b> and shows today vs with the change</sub></td>
+    <td align="center" width="25%"><h3>🛡️ Trust it</h3><sub>Nemotron explains; the engine computes. A guardrail rejects any invented number</sub></td>
+  </tr>
+</table>
+
+> **What is new:** a co-design loop where **NVIDIA Nemotron proposes ideas but a deterministic physics
+> engine evaluates every one**, so each recommendation arrives with its own computed before/after.
+> [Read why it is innovative ›](#why-it-is-innovative)
 
 *Nebius x NVIDIA Global AI Hackathon, Best Apps and Agents track*
 
