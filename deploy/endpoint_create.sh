@@ -7,7 +7,7 @@
 #
 # STATUS: never run. No Nebius account or CLI was available. Read deploy/endpoint.md first.
 # COST: a GPU platform is billed while the endpoint exists. The app needs no GPU: choose a CPU
-# platform in the console (the CLI docs name only GPU platforms), and delete the endpoint after judging.
+# platform in the console (the CLI docs name only GPU platforms), and delete the endpoint when you no longer need it.
 set -euo pipefail
 : "${IMAGE:?set IMAGE}"; : "${PLATFORM:?set PLATFORM (a CPU platform id from the console)}"
 : "${PRESET:?set PRESET}"; : "${SUBNET_ID:?set SUBNET_ID}"

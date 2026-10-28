@@ -1,6 +1,6 @@
 """Safeguards for a public demo: rate limits, a switch for billed actions, security headers.
 
-A judge-facing URL spends real credits (Token Factory tokens, Tavily searches, GPU time) and is
+A public demo URL spends real credits (Token Factory tokens, Tavily searches, GPU time) and is
 shared by strangers, so in demo mode (`GC_PUBLIC_DEMO=1`) billed or abusable actions are refused
 and the Green Agent and the analysis endpoint are rate limited per client IP. Locally nothing here
 restricts anything unless you set the limits yourself.

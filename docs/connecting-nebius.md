@@ -22,7 +22,7 @@ Two connections, both optional: the app works without them (the engine, charts, 
 
 **Model IDs are not verified.** The defaults (`nvidia/Nemotron-3-Ultra-550b-a55b`, `nvidia/nemotron-3-super-120b-a12b`, `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`) come from third-party catalogues. The app fetches the real list and matches by name, so a wrong default degrades gracefully; set `GC_MODEL_ULTRA/SUPER/NANO` to pin exact IDs. Nano Omni is never used for text.
 
-NVIDIA's own hosted API is also OpenAI-compatible: point `TOKEN_FACTORY_BASE_URL` at it with its key to use NVIDIA-hosted Nemotron instead (the hackathon requires Nebius, so keep Token Factory for the submission).
+NVIDIA's own hosted API is also OpenAI-compatible: point `TOKEN_FACTORY_BASE_URL` at it with its key to use NVIDIA-hosted Nemotron instead (Nebius Token Factory is the supported default).
 
 ## 2. Real NVIDIA GPU measurements: Nebius Serverless Jobs
 

@@ -9,54 +9,55 @@ real where you can, and export what you decided.
 It runs entirely on your own machine. NVIDIA GPUs, Nebius cloud jobs and an AI assistant are
 optional accelerators, never requirements.
 
-## Nebius x NVIDIA Global AI Hackathon submission
+> Built for the Nebius x NVIDIA Global AI Hackathon, Best Apps and Agents track.
+> **Live demo:** https://green-computer-7yy6xwxdna-ue.a.run.app (free, no payment, no email
+> confirmation). Two-minute tour: [docs/demo-guide.md](docs/demo-guide.md).
 
-| | |
-|---|---|
-| **Track** | Best Apps and Agents |
-| **Live demo** | https://green-computer-7yy6xwxdna-ue.a.run.app (free, no payment, no email confirmation; stays up until judging ends). Two-minute tour: [docs/for-judges.md](docs/for-judges.md) |
-| **Runs on Token Factory** | Runtime calls to the Nebius Token Factory inference API, using **NVIDIA Nemotron** models (Ultra, Super, Nano) |
-| **Other services** | **Tavily** (runtime datasheet search, for the Best Use of Tavily award). Nebius Serverless Jobs / Endpoints: built, not run live (see the status table) |
-| **Licence** | Apache-2.0 |
-| **Started** | 13 October 2026, inside the submission period (26 August to 30 October 2026): a new project, not an update of an older one. The full commit history is in this repository |
+## The problem
 
-### Where Nemotron and Token Factory are used
+Engineers who put AI on robots, cameras and edge boards usually find out late that the model
+overheats, throttles itself, blows the power budget or sits on the wrong board. Fixing it means weeks
+of trial and error across the model, the software and the hardware.
 
-| Nemotron model on Token Factory | Job | Why that model | Code |
+The Green Computer shows this *before* anything is built. In the bundled example, a YOLOv8s detector
+on a Jetson Orin NX at 30 inputs a second in a 40 °C room fails today (the chip throttles to about
+70% of its speed). The app ranks fixes, re-runs the analysis with each, and a recommended plan meets
+every requirement with about 59% less power. The result exports as a report and a recipe of scripts.
+
+## Built on NVIDIA Nemotron and Nebius Token Factory
+
+The deterministic engine computes every number. **NVIDIA Nemotron models, called at run time through
+the Nebius Token Factory inference API** (OpenAI-compatible, `TOKEN_FACTORY_API_KEY`), explain and
+suggest. Each tier does the job it suits:
+
+| Nemotron model | Job | Why that model | Code |
 |---|---|---|---|
-| **Nemotron 3 Ultra** | Green Agent: plans, calls the engine as tools, explains results | Serious multi-step reasoning and tool use | `backend/app/agent/` |
-| **Nemotron 3 Super** | AI candidates: extra change ideas as schema-checked JSON | Mid-weight reasoning at lower cost | `backend/app/agent/recommender.py` |
-| **Nemotron 3 Nano** | Datasheet import: pulls specs from pages Tavily found | Fast, cheap extraction | `backend/app/agent/datasheet.py` |
+| **Nemotron 3 Ultra** | **Green Agent**: plans, calls the engine as tools, explains results | Multi-step reasoning and tool use | `backend/app/agent/` |
+| **Nemotron 3 Super** | **AI candidates**: extra change ideas as schema-checked JSON | Mid-weight reasoning at lower cost | `backend/app/agent/recommender.py` |
+| **Nemotron 3 Nano** | **Datasheet import**: reads specs from pages found by **Tavily** | Fast, cheap extraction | `backend/app/agent/datasheet.py`, `backend/app/integrations/tavily.py` |
 
-Token Factory is what makes the assistant usable for a physics tool: tool-calling Nemotron answers
-by asking the deterministic engine, and a guardrail rejects any number that is not in a tool
-result. Live results and the failures we fixed are in the status table and in
-[docs/for-judges.md](docs/for-judges.md).
+How the model is kept honest: the agent answers by calling the engine as tools, and a guardrail
+rejects any figure that is not in a tool result. It cannot change your requirements. AI candidates
+are schema-checked (unknown change ids lose their link, unsupported figures are removed) and labelled
+"not evaluated" until the engine runs them. Datasheet values are shown with their source page and a
+person confirms them. Model ids are matched against the provider's own model list at run time
+(`GC_MODEL_ULTRA`, `GC_MODEL_SUPER`, `GC_MODEL_NANO` override them).
 
-### How this maps to the judging criteria
+**Nebius AI Cloud.** Serverless Jobs (real GPU benchmarks for calibration) and Serverless Endpoints
+(to host the app) are built and documented in [docs/connecting-nebius.md](docs/connecting-nebius.md)
+and [deploy/endpoint.md](deploy/endpoint.md). They are off by default (`GC_ENABLE_NEBIUS=0`) and have
+not been run live; see the status table below.
 
-- **Technological implementation.** A deterministic engine (per-layer roofline, coupled
-  power / temperature / throttling solve, uncertainty bands, constraint search), a digital-twin
-  execution trace, accounts with tenant isolation, and a three-model Nemotron layer with output
-  validation (JSON repair, one retry, number guardrail). Tested by a backend suite, 15 Playwright
-  journeys with axe accessibility checks, and an acceptance script
-  (see [Checks](#checks)). Architecture: [docs/architecture.md](docs/architecture.md).
-- **Design.** One numbered path (Inputs, Verification, Analysis, Recommendations, Validation,
-  Export) with a stepper and Back / Next on every page, example projects, light and dark themes,
-  and plain-language "planned" messages instead of fake success for unsupported inputs.
-- **Potential impact.** Engineers putting AI on robots and edge devices find out late that the model
-  overheats, throttles or blows the power budget. Here they see it before buying or building, get
-  ranked fixes, and export a report and a recipe. The bundled example (YOLOv8s on a Jetson Orin NX)
-  fails today and a recommended plan meets every requirement with about 59% less power.
-- **Quality of the idea.** The language model is deliberately *not* the source of any number: it
-  explains and proposes, and the engine evaluates. Every metric carries a range and a provenance
-  (predicted, calibrated, measured), and predictions are never shown as measurements.
+## What makes it different
 
-### Be straight with judges
-
-No Jetson, GPU or power measurement exists yet, so Jetson results are analytical predictions with
-stated ranges. Nebius Serverless Jobs and Endpoints are not run live. The full table is under
-[What is and is not verified](#what-is-and-is-not-verified).
+- **Numbers you can trust.** Every metric carries a `low..high` range and a source (analytical,
+  calibrated, measured, vendor specification or assumed). Predictions are never shown as measurements.
+- **The model never invents a figure.** The language model explains and proposes; the engine decides.
+- **One coherent path.** Inputs, verification, analysis, recommendations, validation, export, with a
+  numbered stepper and Back / Next buttons on every page, example projects, and light and dark themes.
+- **Honest about gaps.** Unsupported inputs (schematic, PCB, RTL, netlist, assembly) return a clear
+  "planned" message naming the format needed, never a fake success. Requirements are never loosened to
+  make a result pass.
 
 ## Start it
 
@@ -105,26 +106,6 @@ data stays in `green_computer.db` and `gc_data/` in this folder. Options: `--por
 
 The app walks you through this in order: a numbered stepper at the top, the same six stages in the
 side navigation, and Back / Next buttons on every page.
-
-## NVIDIA Nemotron and Nebius in this project
-
-The engine computes every number. The language model only explains and suggests, through **NVIDIA
-Nemotron on Nebius Token Factory** (an OpenAI-compatible API, `TOKEN_FACTORY_API_KEY`):
-
-| Where | What the model does | Code |
-|---|---|---|
-| **Green Agent** (sidebar, "Ask the assistant") | Plans and answers by calling the engine as tools; a guardrail rejects any figure that is not in a tool result, and it cannot change your requirements | `backend/app/agent/` |
-| **AI candidates** (Recommendations, "Every recommendation, in full") | Proposes extra changes as schema-checked JSON; unknown change ids lose their link, unsupported figures are removed, and each is labelled "not evaluated" | `backend/app/agent/recommender.py` |
-| **Datasheet import** | Reads specs from datasheet text that **Tavily** found, for hardware not in the library; a person confirms them | `backend/app/agent/datasheet.py`, `backend/app/integrations/tavily.py` |
-
-Model ids default to Nemotron Ultra, Super and Nano and are matched against the provider's own
-model list at run time (`GC_MODEL_ULTRA`, `GC_MODEL_SUPER`, `GC_MODEL_NANO` override them).
-**Nebius Serverless Jobs** (real GPU benchmarks for calibration) and **Serverless Endpoints** (to
-host the app) are built and documented ([docs/connecting-nebius.md](docs/connecting-nebius.md),
-[deploy/endpoint.md](deploy/endpoint.md)); see the status table for what has actually been run.
-
-This repository was started on 13 October 2026, inside the hackathon submission period. For the
-hackathon track, setup, and a two-minute tour for judges, see [docs/for-judges.md](docs/for-judges.md).
 
 ## Honesty rules
 
@@ -206,7 +187,7 @@ Details: [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md), [docs/api.md](doc
 | Terms, privacy and acceptable-use pages | Written to match the implementation; **draft, needs professional legal review** |
 | OCR for scanned PDFs | Implemented; untested here (no Tesseract installed) |
 | Docker image | Built by Cloud Build and running as the public demo. The compose stack is written but not run; the Quick start above is the way to run it locally |
-| Cloud Run + Neon demo deployment (`deploy/cloudrun/`) | Deployed 27 Oct 2026: readiness check passes, sign-up and sign-in work in a browser. Demo URL in docs/for-judges.md |
+| Cloud Run + Neon demo deployment (`deploy/cloudrun/`) | Deployed 27 Oct 2026: readiness check passes, sign-up and sign-in work in a browser. Demo URL above |
 | Browser journeys | 15 Playwright tests (sign-up to export, accessibility checks in light and dark) pass against a local server |
 | Recipes and deployment configs | Templates; syntax-checked, not run on devices |
 | Chip/board what-ifs | Directional analytical what-ifs, not designs |

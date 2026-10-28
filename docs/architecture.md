@@ -141,9 +141,9 @@ validation-first, modular, provider-independent (any OpenAI-compatible endpoint,
 | Accuracy on your own data | Partial: measured retention via local INT8 comparison; no general dataset evaluator |
 | Terms, privacy, consent records | Built; legal text is a **draft for professional review** |
 
-## 10. Hackathons
+## 10. Model providers
 
-**NVIDIA × Nebius:** set `TOKEN_FACTORY_API_KEY` in `.env`, run `scripts/check_nebius.py`, then
+**NVIDIA Nemotron on Nebius Token Factory:** set `TOKEN_FACTORY_API_KEY` in `.env`, run `scripts/check_nebius.py`, then
 use the assistant and "Ask the AI for candidates". Each candidate request is one chat call capped
 at 1,400 output tokens and cached per analysis.
 

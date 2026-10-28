@@ -24,18 +24,18 @@ TOKEN_FACTORY_SECRET=<selector> deploy/endpoint_create.sh          # dry run fir
 DRY_RUN=0 IMAGE=... deploy/endpoint_create.sh                      # then create
 ```
 
-- `--auth none` makes the URL public, as the competition requires ("free and unrestricted for judges").
+- `--auth none` makes the URL public, so anyone can try it without signing in to Nebius.
 - `GC_PUBLIC_DEMO=1` turns off the actions that spend money (GPU jobs, datasheet search), rate limits the Green Agent and the analysis, caps uploads and gives each visitor their own project. `GC_TRUST_PROXY=1` makes the limits use the visitor's address from `X-Forwarded-For` (set it only behind Nebius's proxy).
 - **Choose a CPU platform.** The CLI docs list only GPU platforms (`gpu-h100-sxm`, `gpu-l40s-d`, ...) and the default is a GPU one, which is billed while the endpoint exists. The web console lets you create a VM without GPUs.
 - Creation takes about five minutes. The public URL appears in `status.public_endpoints`.
 
-## 4. Check it as a judge would
+## 4. Check it as a visitor would
 
 From a clean browser (no login): open the URL, click an example, press **Analyse**, open **Export**. Then, with the agent key set, ask the Green Agent a question. `curl <url>/api/v1/health` should report `"demo_mode": true`.
 
-## 5. Keep it alive until judging ends, then stop paying
+## 5. Keep it alive while needed, then stop paying
 
-The rules require the demo to stay up free for judges until 15 Dec. Token Factory credits expire 90 days after issue, so claim them no earlier than needed. Afterwards: `nebius ai endpoint stop --id <ID>` (keeps it) or `nebius ai endpoint delete --id <ID>` (removes the VM and boot disk).
+Token Factory credits expire 90 days after issue, so claim them no earlier than needed. When you no longer need it: `nebius ai endpoint stop --id <ID>` (keeps it) or `nebius ai endpoint delete --id <ID>` (removes the VM and boot disk).
 
 ## Known limits of this deployment
 

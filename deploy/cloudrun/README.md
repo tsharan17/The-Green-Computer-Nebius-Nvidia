@@ -5,7 +5,7 @@
 What you get: a public `https://green-computer-….run.app` link (HTTPS, no sign-in needed to open it), accounts and projects kept in a free Neon PostgreSQL database, and a free scheduled ping that keeps the app awake.
 
 ```
-judge's browser ──https──> Cloud Run (the app, 2 vCPU / 2 GB, scales to zero)
+visitor's browser ──https──> Cloud Run (the app, 2 vCPU / 2 GB, scales to zero)
                               │            ▲
                               │            └── Cloud Scheduler: GET /api/v1/health every 5 min (keeps it warm)
                               ├── Neon PostgreSQL (accounts, projects, plans)
@@ -18,7 +18,7 @@ Nothing, if the demo stays inside the free allowances: Cloud Run 2 million reque
 
 ## Limits to know
 
-- **Uploaded files and exports are kept on the instance's disk, which is wiped when Cloud Run restarts it.** Accounts, projects, analyses and plans survive (they are in Neon). A judge who generates an export and downloads it straight away is fine; one who comes back after a restart will find the old export's download fails and should create it again.
+- **Uploaded files and exports are kept on the instance's disk, which is wiped when Cloud Run restarts it.** Accounts, projects, analyses and plans survive (they are in Neon). A visitor who generates an export and downloads it straight away is fine; one who comes back after a restart will find the old export's download fails and should create it again.
 - **A cold start takes 5 to 10 seconds** if the keep-warm ping ever misses. Neon pauses after 5 idle minutes and wakes in about a second on the next request.
 - The demo runs with `GC_PUBLIC_DEMO=1`: GPU jobs are refused; the Green Agent (40 an hour) and datasheet import (5 an hour) are rate limited per visitor address; uploads are capped.
 
@@ -53,7 +53,7 @@ Fill in these lines and save (the name must stay `.env.cloudrun`, not `.env.clou
 - `PROJECT_ID=` the project ID from step 2
 - `DATABASE_URL=` the Neon string from step 1
 - `TOKEN_FACTORY_API_KEY=` the same key as in your local `.env`
-- `TAVILY_API_KEY=` the same key as in your local `.env` (turns on datasheet search for judges)
+- `TAVILY_API_KEY=` the same key as in your local `.env` (turns on datasheet search for visitors)
 
 This file is git-ignored. Do not paste its contents anywhere.
 
@@ -65,7 +65,7 @@ powershell -ExecutionPolicy Bypass -File deploy\cloudrun\deploy.ps1
 
 The script prints each stage. The first run takes 5 to 10 minutes, mostly the build. At the end it prints `Demo URL:` and checks `/api/v1/ready` (database reachable, migrations applied). Run it again any time to deploy new code; it keeps secrets that have not changed.
 
-### 5. Check the demo like a judge
+### 5. Check the demo as a visitor would
 
 1. Open the URL in a private window. Sign up (no email step), open **Example: YOLOv8s on a robot**, press **Analyse**, and walk the six steps.
 2. Press **Ask the assistant** and ask "Why does it fail today?".
@@ -85,7 +85,7 @@ Tell me the URL and I will fill in the `[DEMO URL]` placeholders in the docs.
 1. [console.cloud.google.com/billing/budgets](https://console.cloud.google.com/billing/budgets) > **Create budget**, limited to the `green-computer-demo` project, amount **$1**, alerts at 50% and 100%.
 2. The deploy already caps the service at 3 instances.
 
-### 7. After judging (15 December)
+### 7. When the demo is no longer needed
 
 Delete the project (**IAM & Admin > Settings > Shut down**) and the Neon project. Everything stops, including the scheduler job.
 

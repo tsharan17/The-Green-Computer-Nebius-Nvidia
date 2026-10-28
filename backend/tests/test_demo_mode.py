@@ -57,7 +57,7 @@ def test_billed_actions_are_refused_in_demo(demo):
 
 
 def test_datasheet_import_is_open_in_demo_but_rate_limited(demo, monkeypatch):
-    # Judges can try it (it calls Token Factory), but only a few times an hour per address.
+    # Visitors can try it (it calls Token Factory), but only a few times an hour per address.
     monkeypatch.setenv("GC_DATASHEET_RATE_PER_HOUR", "2")
     codes = [demo.post(f"{P}/hardware/import", json={"name": "Some Board"}).status_code for _ in range(3)]
     assert codes[:2] == [503, 503]  # reaches the real check (here: no keys), not a demo block

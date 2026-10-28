@@ -1,9 +1,9 @@
 """Acceptance check for a RUNNING copy of The Green Computer (local or the public URL).
 
     python scripts/acceptance.py                      # http://localhost:8000
-    python scripts/acceptance.py https://your-demo    # the deployed endpoint, as a judge would see it
+    python scripts/acceptance.py https://your-demo    # the deployed endpoint, as a visitor would see it
 
-Standard library only, so it runs anywhere. It walks the journey a judge would: health, analyse the
+Standard library only, so it runs anywhere. It walks the journey a visitor would: health, analyse the
 robot example, read the verdict and the four levels of advice, confirm requirements were not
 relaxed, export the report and recipe, and report what is connected. Steps that need a key (the
 Green Agent) or are switched off in the public demo are reported as SKIP, never faked.
