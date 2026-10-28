@@ -167,7 +167,7 @@ all of them **before the hardware exists**, in a single path.
 | **Outcome** | Insight | A report, a plan and a recipe of scripts you can act on |
 
 What is new, in one line: **a co-design loop where a language model proposes ideas but a deterministic
-physics engine evaluates every one of them, so each recommendation arrives with its measured-style
+physics engine evaluates every one of them, so each recommendation arrives with its own computed
 before/after, not a guess.** (We make no claim that nothing similar exists anywhere; this is the
 combination we built and verified, with its limits stated below.)
 
@@ -190,9 +190,9 @@ flowchart LR
 | Level | Example changes | What you see change |
 |---|---|---|
 | 🧠 **The AI model** | Quantise (FP16 / INT8), prune, smaller input, a lighter model | Energy, throughput, accuracy risk |
-| ⚙️ **How it runs** | Batch size, scheduling | Latency, throughput, memory |
+| ⚙️ **How it runs** | Batching, runtime options | Latency, throughput, memory |
 | 🎛️ **Hardware settings** | Power mode, clocks | Power, temperature, throttling |
-| 🔌 **Hardware or cooling** | Another board, a bigger heatsink or fan | Steady-state temperature, headroom |
+| 🔌 **Hardware or cooling** | Another board, a bigger heatsink or other cooling | Steady-state temperature, headroom |
 | 💡 **Chip and board ideas** | Directional what-ifs, labelled as such | Direction of change only |
 
 **What the impact view shows, for each change you try:**
