@@ -4,6 +4,8 @@
 
 # The Green Computer
 
+## ***"The Sustainable Tech of 21st Century"***
+
 **See how an AI model will run on your hardware, before you build it.**<br>
 Predict latency, power, heat, throttling, cost and carbon. Get ranked fixes. Verify. Export.
 
@@ -38,16 +40,23 @@ Predict latency, power, heat, throttling, cost and carbon. Get ranked fixes. Ver
 
 ## The problem
 
-Engineers who put AI on robots, cameras and edge boards usually find out late that the model
-overheats, throttles itself, blows the power budget or sits on the wrong board. Fixing it means weeks
-of trial and error across the model, the software and the hardware.
+> [!IMPORTANT]
+> Teams put AI on robots, cameras and edge boards, then discover **too late** that the model
+> overheats, throttles itself, blows the power budget or sits on the wrong board. Fixing it means
+> weeks of trial and error across the model, the software and the hardware.
 
-**The Green Computer shows this before anything is built.** In the bundled example, a YOLOv8s
-detector on a Jetson Orin NX at 30 inputs a second in a 40 °C room **fails today**: the chip heats to
-90 °C and throttles to about 70% of its speed. The app ranks fixes, re-runs the analysis with each,
-and the recommended plan **meets every requirement with about 59% less power**. The result exports
-as a report and a recipe of scripts. Everything is vendor-neutral and runs fully offline; NVIDIA GPUs,
-Nebius cloud jobs and the AI assistant are optional accelerators.
+**The Green Computer shows it before anything is built.** The bundled example, a YOLOv8s detector on
+a Jetson Orin NX at 30 inputs a second in a 40 °C room:
+
+| | Today | With the recommended plan |
+|---|:---:|:---:|
+| **Verdict** | ❌ Fails | ✅ Passes every requirement |
+| **Chip temperature** | 🔥 90 °C, throttles to ~70% speed | ❄️ within your limits |
+| **Power** | baseline | **about 59% less** |
+| **Energy per input** | baseline | **-72%** |
+
+Then it exports a report and a recipe of scripts. Everything is vendor-neutral and runs fully
+offline; NVIDIA GPUs, Nebius cloud jobs and the AI assistant are optional accelerators.
 
 ## See it
 
@@ -89,25 +98,33 @@ suggest. Each tier does the job it suits:
 | **Nemotron 3 Super** | **AI candidates**: extra change ideas as schema-checked JSON | Mid-weight reasoning at lower cost | `backend/app/agent/recommender.py` |
 | **Nemotron 3 Nano** | **Datasheet import**: reads specs from pages found by **Tavily** | Fast, cheap extraction | `backend/app/agent/datasheet.py`, `backend/app/integrations/tavily.py` |
 
-**How the model is kept honest.** The agent answers by calling the engine as tools, and a guardrail
-rejects any figure that is not in a tool result; it cannot change your requirements. AI candidates are
-schema-checked (unknown change ids lose their link, unsupported figures are removed) and labelled
-"not evaluated" until the engine runs them. Datasheet values are shown with their source page and a
-person confirms them. Model ids are matched against the provider's own model list at run time
-(`GC_MODEL_ULTRA`, `GC_MODEL_SUPER`, `GC_MODEL_NANO` override them). All three are live in the
-[hosted demo](https://green-computer-7yy6xwxdna-ue.a.run.app).
+### How the model is kept honest
+
+```mermaid
+flowchart LR
+    Q([Your question]) --> A[Nemotron agent]
+    A -->|asks| E[Engine tools]
+    E -->|numbers + provenance| A
+    A --> G{Guardrail}
+    G -->|every figure is in a tool result| R([Answer])
+    G -->|unsupported figure| X([Rejected])
+```
+
+| Guard | What it does |
+|---|---|
+| 🛡️ **Number guardrail** | Rejects any figure in a reply that is not in a tool result |
+| 🔒 **Read-only requirements** | The agent cannot change your limits to make a result pass |
+| 🧾 **Schema-checked candidates** | Unknown change ids lose their link, unsupported figures are removed, each is labelled *not evaluated* until the engine runs it |
+| 👤 **Human confirmation** | Datasheet values arrive with their source page; a person confirms them |
+| 🔌 **Live model matching** | Ids are matched against the provider's own list (`GC_MODEL_ULTRA`, `GC_MODEL_SUPER`, `GC_MODEL_NANO` override). All three are live in the [hosted demo](https://green-computer-7yy6xwxdna-ue.a.run.app) |
 
 ### Where Token Factory helped
 
-- **No GPU needed to use Nemotron.** The project was built on a machine without an NVIDIA GPU; Token
-  Factory served Ultra, Super and Nano through one OpenAI-compatible endpoint, so the assistant,
-  candidate generation and datasheet extraction run from any laptop or from the cloud demo.
-- **Right-sized models.** Ultra handles the multi-step tool-calling agent (a short reply took about
-  1.4 s in our tests); Super generates candidates (12 to 21 s for six); Nano extracts datasheet values
-  (45 to 60 s for the whole search-and-extract import, including Tavily). Credits go to the model that
-  needs them.
-- **Swappable.** `TOKEN_FACTORY_BASE_URL` and the `GC_MODEL_*` settings point the same code at any
-  OpenAI-compatible endpoint. `scripts/check_nebius.py` verifies chat and a tool-call round trip.
+| | Benefit | In practice |
+|---|---|---|
+| 🚀 | **No GPU needed to use Nemotron** | Built on a machine without an NVIDIA GPU; one OpenAI-compatible endpoint serves Ultra, Super and Nano to any laptop and the cloud demo |
+| ⚖️ | **Right-sized models** | Ultra: tool-calling agent, ~1.4 s for a short reply. Super: six candidates in 12 to 21 s. Nano: whole search-and-extract datasheet import in 45 to 60 s (including Tavily) |
+| 🔁 | **Swappable** | `TOKEN_FACTORY_BASE_URL` and `GC_MODEL_*` point the same code at any OpenAI-compatible endpoint; `scripts/check_nebius.py` checks chat and a tool-call round trip |
 
 ### Services used
 
@@ -124,14 +141,14 @@ and off by default (`GC_ENABLE_NEBIUS=0`).
 
 ## Why it is different
 
-- **Numbers you can trust.** Every metric carries a `low..high` range and a source (analytical,
-  calibrated, measured, vendor specification or assumed). Predictions are never shown as measurements.
-- **The model never invents a figure.** The language model explains and proposes; the engine decides.
-- **One coherent path.** Inputs, verification, analysis, recommendations, validation, export, with a
-  numbered stepper and Back / Next buttons on every page, example projects, and light and dark themes.
-- **Honest about gaps.** Unsupported inputs (schematic, PCB, RTL, netlist, assembly) return a clear
-  "planned" message naming the format needed, never a fake success. Requirements are never loosened to
-  make a result pass.
+<table>
+  <tr>
+    <td width="25%" valign="top"><h3>📏 Honest numbers</h3>Every metric carries a <code>low..high</code> range and a source: analytical, calibrated, measured, vendor spec or assumed. Predictions are never shown as measurements.</td>
+    <td width="25%" valign="top"><h3>🧮 The model never invents</h3>The language model explains and proposes. The engine decides, and every figure is traceable to a tool result.</td>
+    <td width="25%" valign="top"><h3>🧭 One coherent path</h3>Inputs, verification, analysis, recommendations, validation, export: a numbered stepper, Back / Next on every page, example projects, light and dark themes.</td>
+    <td width="25%" valign="top"><h3>🚧 Clear about gaps</h3>Unsupported inputs (schematic, PCB, RTL, netlist, assembly) get a "planned" message naming the format needed, never a fake success. Requirements are never loosened to pass.</td>
+  </tr>
+</table>
 
 ## Features
 
