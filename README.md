@@ -6,12 +6,14 @@ is built: latency, memory, power, energy, heat, throttling, cost and carbon, ope
 Then choose software and hardware changes, compare the result against today, run the model for
 real where you can, and export what you decided.
 
-It runs entirely on your own machine. NVIDIA GPUs, Nebius cloud jobs and an AI assistant are
-optional accelerators, never requirements.
+**Try it now, nothing to install: [https://green-computer-7yy6xwxdna-ue.a.run.app](https://green-computer-7yy6xwxdna-ue.a.run.app)**
+Free, no payment and no email confirmation. Create an account, open the example project and press
+**Analyse**. A two-minute guided tour is in [docs/demo-guide.md](docs/demo-guide.md).
 
-> Built for the Nebius x NVIDIA Global AI Hackathon, Best Apps and Agents track.
-> **Live demo:** https://green-computer-7yy6xwxdna-ue.a.run.app (free, no payment, no email
-> confirmation). Two-minute tour: [docs/demo-guide.md](docs/demo-guide.md).
+Built for the Nebius x NVIDIA Global AI Hackathon, Best Apps and Agents track. The hosted demo
+uses NVIDIA Nemotron on Nebius Token Factory for the assistant, AI candidates and datasheet import
+(rate limited to protect credits). You can also run your own copy on your machine; NVIDIA GPUs, Nebius
+cloud jobs and the AI assistant are optional accelerators, never requirements.
 
 ## The problem
 
@@ -23,6 +25,18 @@ The Green Computer shows this *before* anything is built. In the bundled example
 on a Jetson Orin NX at 30 inputs a second in a 40 °C room fails today (the chip throttles to about
 70% of its speed). The app ranks fixes, re-runs the analysis with each, and a recommended plan meets
 every requirement with about 59% less power. The result exports as a report and a recipe of scripts.
+
+## Try it live in two minutes
+
+Open **[https://green-computer-7yy6xwxdna-ue.a.run.app](https://green-computer-7yy6xwxdna-ue.a.run.app)**, then:
+
+1. **Sign up** (email and password) and open **Example: YOLOv8s on a robot (30 FPS, 55 W, 40 °C)**.
+2. **Analyse.** Today's setup fails: the Jetson Orin NX overheats and throttles to about 70% of its speed.
+3. **Recommendations.** Click **Start with the top-ranked change**; the engine re-runs everything with it.
+4. **Validation.** Build a plan: it meets every requirement with about 59% less power.
+5. **Ask the assistant** (sidebar): Nemotron answers by calling the engine, and every figure is checked.
+6. **Datasheet import** (Inputs > Hardware, "Your hardware isn't in the list?"): try "Hailo-8L".
+7. **Export** the report and recipe.
 
 ## Built on NVIDIA Nemotron and Nebius Token Factory
 
@@ -41,7 +55,8 @@ rejects any figure that is not in a tool result. It cannot change your requireme
 are schema-checked (unknown change ids lose their link, unsupported figures are removed) and labelled
 "not evaluated" until the engine runs them. Datasheet values are shown with their source page and a
 person confirms them. Model ids are matched against the provider's own model list at run time
-(`GC_MODEL_ULTRA`, `GC_MODEL_SUPER`, `GC_MODEL_NANO` override them).
+(`GC_MODEL_ULTRA`, `GC_MODEL_SUPER`, `GC_MODEL_NANO` override them). All three are live in the
+[hosted demo](https://green-computer-7yy6xwxdna-ue.a.run.app).
 
 **Nebius AI Cloud.** Serverless Jobs (real GPU benchmarks for calibration) and Serverless Endpoints
 (to host the app) are built and documented in [docs/connecting-nebius.md](docs/connecting-nebius.md)
@@ -58,17 +73,6 @@ not been run live; see the status table below.
 - **Honest about gaps.** Unsupported inputs (schematic, PCB, RTL, netlist, assembly) return a clear
   "planned" message naming the format needed, never a fake success. Requirements are never loosened to
   make a result pass.
-
-## Start it
-
-- **Windows:** double-click **`Start The Green Computer.bat`** in this folder.
-- **macOS / Linux:** run `./start.sh`.
-
-It opens http://localhost:8000 in your browser. Keep the window open while you use the app, and
-press Ctrl+C there to stop. The first start takes a few minutes: it creates the Python environment
-and builds the interface, and needs Python 3.11+ and Node.js 20+. Later starts take seconds. Your
-data stays in `green_computer.db` and `gc_data/` in this folder. Options: `--port 8080`,
-`--rebuild`, `--no-browser`.
 
 ## What you can do
 
@@ -117,7 +121,20 @@ side navigation, and Back / Next buttons on every page.
 - Accuracy effects of quantisation or pruning are priors with stated risk, never promises.
 - The optional AI assistant cannot produce numbers; the engine computes all of them.
 
-## Quick start
+## Run your own copy (optional)
+
+The hosted demo needs none of this. To run locally:
+
+- **Windows:** double-click **`Start The Green Computer.bat`** in this folder.
+- **macOS / Linux:** run `./start.sh`.
+
+It opens http://localhost:8000 in your browser. Keep the window open while you use the app, and
+press Ctrl+C there to stop. The first start takes a few minutes: it creates the Python environment
+and builds the interface, and needs Python 3.11+ and Node.js 20+. Later starts take seconds. Your
+data stays in `green_computer.db` and `gc_data/` in this folder. Options: `--port 8080`,
+`--rebuild`, `--no-browser`.
+
+## Developer setup
 
 ```powershell
 scripts/dev.ps1          # Windows: installs, builds the UI, serves http://localhost:8000
@@ -126,11 +143,12 @@ scripts/dev.ps1          # Windows: installs, builds the UI, serves http://local
 scripts/dev.sh           # macOS / Linux / Git Bash
 ```
 
-Open http://localhost:8000, create an account (it comes with an example project), and press
+Open http://localhost:8000 (or the hosted demo above), create an account (it comes with an example project), and press
 Analyse. Optional: `python scripts/demo_data.py http://localhost:8000` fills a demo account with
 analysed projects, a plan, exports and a local run.
 
-Production-like stack with PostgreSQL: `docker compose up --build` (see `docker-compose.yml`).
+**Hosted deployment:** the public demo at https://green-computer-7yy6xwxdna-ue.a.run.app runs this repository's Docker image on Google Cloud
+Run with a Neon PostgreSQL database (`deploy/cloudrun/`). Production-like stack with PostgreSQL locally: `docker compose up --build` (see `docker-compose.yml`).
 Configuration is by environment variables; `.env.example` lists every one. Never commit `.env`.
 
 ## Architecture

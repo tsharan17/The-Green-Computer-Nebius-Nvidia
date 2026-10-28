@@ -42,4 +42,4 @@ Where Token Factory is called: `backend/app/agent/` (client, agent loop, tools, 
 
 ## Run your own copy
 
-See the [README](../README.md): `scripts/dev.ps1` (Windows) or `scripts/dev.sh` builds the interface and serves http://localhost:8000. Put `TOKEN_FACTORY_API_KEY` in `.env` to switch the agent on. `scripts/acceptance.py <url>` checks a running copy end to end.
+The hosted demo above needs no setup. To run locally, see the [README](../README.md): `scripts/dev.ps1` (Windows) or `scripts/dev.sh` builds the interface and serves http://localhost:8000. Put `TOKEN_FACTORY_API_KEY` in `.env` to switch the agent on. `scripts/acceptance.py <url>` checks a running copy end to end.
