@@ -1,0 +1,6 @@
+numpy
+onnx
+onnxruntime-gpu
+# On CPU-only hosts install `onnxruntime` instead of onnxruntime-gpu.
+boto3
+# boto3 is only needed by upload_results.py.

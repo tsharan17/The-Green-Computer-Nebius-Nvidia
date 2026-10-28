@@ -1,0 +1,75 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: backend } }
+    services:
+      postgres:
+        image: postgres:16.4-alpine
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U postgres" --health-interval 5s --health-retries 20
+    env:
+      GC_TEST_PG_URL: postgresql+psycopg://postgres:postgres@127.0.0.1:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[dev,postgres]"
+      - run: ruff check .
+      - run: mypy app
+      - run: pytest -q
+  frontend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: frontend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+  e2e:
+    # Browser journeys (sign-up, upload, analysis, plan, comparison, export, access control,
+    # accessibility) against a server started on a throwaway database.
+    runs-on: ubuntu-latest
+    env: { E2E_CHANNEL: chromium, E2E_PYTHON: python, GC_PYTHON: python }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e backend
+      - run: cd frontend && npm ci && npm run build && npx playwright install --with-deps chromium
+      - run: cd frontend && npx playwright test
+  acceptance:
+    # A clean (non-dev) install in public-demo mode, driven like a first-time visitor.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: cd frontend && npm ci && npm run build
+      - run: pip install -e backend
+      - run: |
+          cd backend
+          GC_PUBLIC_DEMO=1 GC_DB_URL=sqlite:////tmp/ci.db uvicorn app.main:app --port 8000 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8000/api/v1/health && break || sleep 1; done
+          cd .. && python scripts/acceptance.py http://127.0.0.1:8000
+  dependencies:
+    # Known-vulnerability scan of what ships: Python packages (pip-audit, OSV/PyPI advisories) and the
+    # UI's production npm dependencies. Fails on any finding with a fix available.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: pip install -e "backend[postgres]" pip-audit
+      - run: pip-audit --skip-editable --strict
+      - run: cd frontend && npm ci && npm audit --omit=dev --audit-level=high

@@ -1,0 +1,29 @@
+id: nebius-h100
+name: NVIDIA H100 SXM (reference GPU, Nebius)
+vendor: NVIDIA
+kind: datacenter_gpu
+role: reference measurement target (availability on Nebius to be confirmed)
+peak_tflops: {fp32: 67.0, fp16: 989.0, int8: 1979.0}
+mem_bw_gbs: 3350.0
+mem_gb: 80.0
+idle_w: 70.0
+dyn_w_max: 500.0
+mem_w_max: 90.0
+leak_w_25c: 40.0
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 95.0
+power_modes:
+  - {id: stock, name: Stock (700 W TDP), cap_w: 700, freq_scale: 1.0, mem_scale: 1.0}
+cooling_options:
+  - {id: datacenter_air, name: Datacenter forced air, r_th_k_per_w: 0.06, fan_w: 0.0, c_th_j_per_k: 4000}
+alternative_candidate: false
+default_cooling: datacenter_air
+nebius_platform: gpu-h100-sxm
+sources:
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  peak_tflops: vendor_spec
+  power_model: assumed
+  thermal: assumed
+notes: Exists to be measured on Nebius (Day 3). Will fail a 55 W limit by design.

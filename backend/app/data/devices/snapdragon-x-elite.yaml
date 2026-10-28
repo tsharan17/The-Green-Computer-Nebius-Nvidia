@@ -1,0 +1,57 @@
+id: snapdragon-x-elite
+name: Qualcomm Snapdragon X Elite (Hexagon NPU)
+vendor: Qualcomm
+kind: laptop_soc
+role: Copilot+ laptop SoC, NPU inference via QNN / ONNX Runtime
+peak_tflops:
+  fp32: 4.6
+  fp16: 9.2
+  int8: 45.0
+mem_bw_gbs: 135.0
+mem_gb: 16.0
+idle_w: 3.0
+dyn_w_max: 13.0
+mem_w_max: 5.0
+leak_w_25c: 2.0
+gamma: 2.5
+t_throttle_c: 100.0
+t_shutdown_c: 110.0
+power_modes:
+- id: eco
+  name: Efficiency
+  cap_w: 15.0
+  freq_scale: 0.7
+  mem_scale: 0.9
+- id: default
+  name: Default 23 W
+  cap_w: 23.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+- id: boost
+  name: Boost
+  cap_w: 45.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: passive
+  name: Thin chassis
+  r_th_k_per_w: 2.0
+  fan_w: 0.0
+  c_th_j_per_k: 100.0
+- id: fan
+  name: Fan
+  r_th_k_per_w: 1.1
+  fan_w: 0.8
+  c_th_j_per_k: 100.0
+default_cooling: fan
+sources:
+  peak_tflops: assumed
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  power_model: assumed
+  thermal: assumed
+  power_modes: vendor_spec
+notes: 45 TOPS is Qualcomm's NPU figure (int8). GPU fp32 about 4.6 TFLOPS from the public spec, fp16 assumed
+  double. 135 GB/s from LPDDR5X-8448 on 128 bits.
+verified: false
+alternative_candidate: true

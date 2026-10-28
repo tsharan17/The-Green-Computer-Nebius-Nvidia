@@ -1,0 +1,3 @@
+"""The Green Computer backend."""
+
+__version__ = "0.7.0"

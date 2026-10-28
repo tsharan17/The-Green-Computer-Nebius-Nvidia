@@ -1,0 +1,12 @@
+id: tiny-resnet8-cifar
+name: ResNet-8 CIFAR-10 (MLPerf Tiny)
+task: image classification
+input_desc: 32x32 RGB
+params_m: 0.078
+gflops: 0.025
+n_layers: 10
+act_mb_fp32: 1.6
+baseline_accuracy: 0.87
+accuracy_metric: CIFAR-10 top-1
+sources: {params_m: vendor_spec, gflops: vendor_spec, act_mb_fp32: analytical, baseline_accuracy: vendor_spec}
+notes: "Approximate figures for the ResNet-8 used by MLPerf Tiny (about 78k parameters, about 12.5M MACs). Activation traffic is a hand estimate."

@@ -1,0 +1,44 @@
+# Production-like local stack: the app and PostgreSQL.
+#   cp .env.example .env    # then set GC_PUBLIC_URL, and SMTP if you want reset emails
+#   docker compose up --build
+#   open http://localhost:8000
+# Data lives in the named volumes. Nothing here has been run in the development environment.
+services:
+  db:
+    image: postgres:16.4-alpine
+    environment:
+      POSTGRES_USER: gc
+      POSTGRES_PASSWORD: ${GC_POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: green_computer
+    volumes:
+      - gc-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gc -d green_computer"]
+      interval: 5s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false # every key is optional; the app works without them
+    environment:
+      GC_ENV: production
+      GC_DB_URL: postgresql+psycopg://gc:${GC_POSTGRES_PASSWORD:-change-me}@db:5432/green_computer
+      GC_DATA_DIR: /data/files
+      # Behind HTTPS set GC_COOKIE_SECURE=1 (default in production) and GC_PUBLIC_URL.
+    volumes:
+      - gc-files:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/v1/ready', timeout=4).status == 200 else 1)"]
+      interval: 15s
+      retries: 5
+
+volumes:
+  gc-pg:
+  gc-files:

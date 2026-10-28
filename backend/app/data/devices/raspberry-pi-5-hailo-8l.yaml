@@ -1,0 +1,58 @@
+id: raspberry-pi-5-hailo-8l
+name: Raspberry Pi 5 + Hailo-8L (AI Kit)
+vendor: Raspberry Pi / Hailo
+kind: accelerator
+role: edge board with 13 TOPS vision accelerator over PCIe
+eta_compute:
+  int8: 0.3
+onchip_weights_mb: 100.0
+onchip_bw_gbs: 50.0
+extras:
+  host_link_gbs: 1.0
+peak_tflops:
+  int8: 13.0
+mem_bw_gbs: 1.0
+mem_gb: 8.0
+idle_w: 3.0
+dyn_w_max: 3.25
+mem_w_max: 1.25
+leak_w_25c: 0.5
+gamma: 2.5
+t_throttle_c: 80.0
+t_shutdown_c: 90.0
+power_modes:
+- id: default
+  name: Default
+  cap_w: 8.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: bare
+  name: No heatsink
+  r_th_k_per_w: 6.0
+  fan_w: 0.0
+  c_th_j_per_k: 15.0
+- id: heatsink
+  name: Passive heatsink
+  r_th_k_per_w: 3.5
+  fan_w: 0.0
+  c_th_j_per_k: 40.0
+- id: active
+  name: Official active cooler
+  r_th_k_per_w: 1.8
+  fan_w: 0.4
+  c_th_j_per_k: 40.0
+default_cooling: heatsink
+sources:
+  peak_tflops: vendor_spec
+  mem_bw_gbs: assumed
+  mem_gb: vendor_spec
+  power_model: assumed
+  thermal: assumed
+  power_modes: assumed
+notes: 13 TOPS int8 is Hailo's figure for the 8L. The host link (PCIe, about 1 GB/s on a Pi 5 x1 lane)
+  is recorded as the external bandwidth; weights are ASSUMED resident on chip (Hailo compiles large networks
+  into contexts the model cannot see), so large models are optimistic. Board power is the Pi plus module
+  estimate. Measure.
+verified: false
+alternative_candidate: true

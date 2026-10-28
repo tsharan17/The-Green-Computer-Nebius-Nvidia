@@ -1,0 +1,71 @@
+id: xilinx-kria-kv260
+name: AMD Kria KV260 (Zynq UltraScale+ ZU5EV)
+vendor: AMD / Xilinx
+kind: fpga
+role: reference design for this class of chip (not measured)
+eta_compute:
+  int8: 0.45
+  fp16: 0.35
+eta_memory: 0.65
+launch_overhead_s: 2.0e-06
+onchip_weights_mb: 2.89
+extras:
+  dsp_slices: 1248.0
+  fabric_mhz: 300.0
+  bram_mb: 0.64
+  uram_mb: 2.25
+  regulator_efficiency: 0.9
+peak_tflops:
+  int8: 1.04832
+  fp16: 0.13104
+mem_bw_gbs: 19.2
+mem_gb: 4.0
+idle_w: 1.2000000000000002
+dyn_w_max: 3.75
+mem_w_max: 1.25
+leak_w_25c: 0.30000000000000004
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 100.0
+power_modes:
+- id: 100pct
+  name: 100% clock
+  cap_w: 6.5
+  freq_scale: 1.0
+  mem_scale: 1.0
+- id: 75pct
+  name: 75% clock
+  cap_w: 4.333163498681454
+  freq_scale: 0.75
+  mem_scale: 0.875
+- id: 50pct
+  name: 50% clock
+  cap_w: 3.021881537628291
+  freq_scale: 0.5
+  mem_scale: 0.75
+cooling_options:
+- id: passive
+  name: Passive (assumed)
+  r_th_k_per_w: 6.461538461538462
+  fan_w: 0.0
+  c_th_j_per_k: 30.0
+- id: active
+  name: With airflow (assumed)
+  r_th_k_per_w: 3.876923076923077
+  fan_w: 0.26
+  c_th_j_per_k: 30.0
+default_cooling: passive
+sources:
+  peak_tflops: assumed
+  mem_bw_gbs: assumed
+  mem_gb: assumed
+  power_model: assumed
+  power_modes: assumed
+  thermal: assumed
+notes: 'DPU-class design at 300 MHz is about 1.2 TOPS in AMD material; the 70% DSP use here lands near
+  that. Static and dynamic power are rough: replace with your Vivado report_power numbers. Peak = 874
+  usable DSPs (70% of 1248) x 2 int8 MACs x 2 x 300 MHz; achieved efficiency assumed 45% (depends entirely
+  on your dataflow design: replace it with your HLS / RTL estimate when you have one). Clock steps, power
+  split and cooling are assumptions: refine with a measurement (Real measurements page).'
+verified: false
+alternative_candidate: true

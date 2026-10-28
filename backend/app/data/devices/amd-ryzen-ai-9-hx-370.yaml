@@ -1,0 +1,51 @@
+id: amd-ryzen-ai-9-hx-370
+name: AMD Ryzen AI 9 HX 370 (XDNA 2 NPU)
+vendor: AMD
+kind: laptop_soc
+role: Strix Point laptop SoC, NPU via Ryzen AI / ONNX Runtime
+peak_tflops:
+  fp16: 25.0
+  int8: 50.0
+mem_bw_gbs: 120.0
+mem_gb: 32.0
+idle_w: 4.0
+dyn_w_max: 15.600000000000001
+mem_w_max: 6.0
+leak_w_25c: 2.4000000000000004
+gamma: 2.5
+t_throttle_c: 100.0
+t_shutdown_c: 110.0
+power_modes:
+- id: eco
+  name: 15 W
+  cap_w: 15.0
+  freq_scale: 0.65
+  mem_scale: 0.9
+- id: default
+  name: 28 W
+  cap_w: 28.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: thin
+  name: Thin laptop
+  r_th_k_per_w: 2.0
+  fan_w: 0.0
+  c_th_j_per_k: 100.0
+- id: fan
+  name: Fan
+  r_th_k_per_w: 1.2
+  fan_w: 0.8
+  c_th_j_per_k: 100.0
+default_cooling: fan
+sources:
+  peak_tflops: assumed
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  power_model: assumed
+  thermal: assumed
+  power_modes: vendor_spec
+notes: AMD quotes 50 TOPS for the XDNA 2 NPU (block-fp16/int8 class; fp16 at half is assumed). 120 GB/s
+  from LPDDR5X-7500 on 128 bits.
+verified: false
+alternative_candidate: true

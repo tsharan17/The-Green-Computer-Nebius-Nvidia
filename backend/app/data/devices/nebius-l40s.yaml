@@ -1,0 +1,29 @@
+id: nebius-l40s
+name: NVIDIA L40S (reference GPU, Nebius)
+vendor: NVIDIA
+kind: datacenter_gpu
+role: reference measurement target (availability on Nebius to be confirmed)
+peak_tflops: {fp32: 91.6, fp16: 362.0, int8: 733.0}
+mem_bw_gbs: 864.0
+mem_gb: 48.0
+idle_w: 35.0
+dyn_w_max: 250.0
+mem_w_max: 45.0
+leak_w_25c: 20.0
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 95.0
+power_modes:
+  - {id: stock, name: Stock (350 W TDP), cap_w: 350, freq_scale: 1.0, mem_scale: 1.0}
+cooling_options:
+  - {id: datacenter_air, name: Datacenter forced air, r_th_k_per_w: 0.12, fan_w: 0.0, c_th_j_per_k: 2500}
+alternative_candidate: false
+default_cooling: datacenter_air
+nebius_platform: gpu-l40s-d
+sources:
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  peak_tflops: vendor_spec
+  power_model: assumed
+  thermal: assumed
+notes: Exists to be measured on Nebius (Day 3). Will fail a 55 W limit by design.

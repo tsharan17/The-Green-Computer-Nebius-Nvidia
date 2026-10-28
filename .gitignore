@@ -1,0 +1,21 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.db
+.env
+node_modules/
+frontend/dist/
+backend/app/static/
+*.egg-info/
+.claude/
+bench/models/
+bench/variants/
+bench/*.json
+gc_data/
+frontend/test-results/
+frontend/playwright-report/
+
+# Filled-in Cloud Run deploy settings (database password, API key)
+.env.cloudrun

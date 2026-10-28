@@ -1,0 +1,68 @@
+id: stm32n6
+name: STM32N6 (Neural-ART NPU, ~600 GOPS)
+vendor: STMicroelectronics
+kind: mcu
+role: reference design for this class of chip (not measured)
+runtime_overhead_gb: 6.5536e-05
+usable_mem_fraction: 0.9
+eta_compute:
+  int8: 0.3
+  fp32: 0.1
+eta_memory: 0.5
+launch_overhead_s: 6.25e-06
+weights_mem_gb: 0.067108864
+extras:
+  core_mhz: 800.0
+  flash_kb: 65536.0
+  sram_kb: 4200.0
+  regulator_efficiency: 0.9
+peak_tflops:
+  int8: 0.6
+mem_bw_gbs: 3.2
+mem_gb: 0.0043008
+idle_w: 0.02
+dyn_w_max: 0.46399999999999997
+mem_w_max: 0.11599999999999999
+leak_w_25c: 0.006
+gamma: 2.5
+t_throttle_c: 105.0
+t_shutdown_c: 120.0
+power_modes:
+- id: 100pct
+  name: 100% clock
+  cap_w: 0.6
+  freq_scale: 1.0
+  mem_scale: 1.0
+- id: 50pct
+  name: 50% clock
+  cap_w: 0.27894291116568837
+  freq_scale: 0.5
+  mem_scale: 0.75
+- id: 25pct
+  name: 25% clock
+  cap_w: 0.22218749999999998
+  freq_scale: 0.25
+  mem_scale: 0.625
+cooling_options:
+- id: as_built
+  name: As built (your θJA)
+  r_th_k_per_w: 50.0
+  fan_w: 0.0
+  c_th_j_per_k: 0.5
+default_cooling: as_built
+sources:
+  peak_tflops: assumed
+  mem_bw_gbs: assumed
+  mem_gb: assumed
+  weights_mem_gb: assumed
+  power_model: assumed
+  power_modes: assumed
+  thermal: vendor_spec
+notes: 'Modelled as 800 MHz x 375 MAC/cycle = 600 GOPS int8 (ST''s Neural-ART headline). Weights live
+  in EXTERNAL flash whose size depends on your board (64 MB assumed); 4.2 MB on-chip RAM holds activations.
+  Running power is a guess: measure. Throughput = MHz x int8 MACs/cycle x 2, 15% achieved by default (kernel
+  efficiency, assumed). SRAM bandwidth assumed 4 bytes/cycle. Flash holds weights, SRAM holds the largest
+  layer''s activations. Clock steps, power split and cooling are assumptions: refine with a measurement
+  (Real measurements page).'
+verified: false
+alternative_candidate: true

@@ -1,0 +1,31 @@
+id: host-cpu
+name: This computer (Intel Core Ultra 7 258V, CPU only)
+vendor: Intel
+kind: edge_soc
+role: development host; the only hardware measured so far (latency only, no power meter)
+peak_tflops: {fp32: 0.404}
+mem_bw_gbs: 46.5
+mem_gb: 31.5
+idle_w: 3.0
+dyn_w_max: 22.0
+mem_w_max: 4.0
+leak_w_25c: 1.0
+gamma: 2.5
+t_throttle_c: 100.0
+t_shutdown_c: 105.0
+power_modes:
+  - {id: balanced, name: Balanced (about 30 W package), cap_w: 30, freq_scale: 1.0, mem_scale: 1.0}
+cooling_options:
+  - {id: laptop_chassis, name: Laptop chassis, r_th_k_per_w: 2.0, fan_w: 1.0, c_th_j_per_k: 120}
+alternative_candidate: false
+default_cooling: laptop_chassis
+sources:
+  peak_tflops: measured
+  mem_bw_gbs: measured
+  mem_gb: measured
+  power_model: assumed
+  thermal: assumed
+notes: >-
+  Compute and bandwidth roofs were measured with bench/probe_host.py (numpy fp32 GEMM and
+  buffer copy). Power and thermal constants are assumptions: this machine has no power meter
+  wired into the benchmark, so power is neither measured nor calibrated.

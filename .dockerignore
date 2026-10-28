@@ -1,0 +1,16 @@
+.git
+.github
+.claude
+**/.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+*.db
+.env
+backend/app/static
+frontend/dist
+bench/models
+bench/variants
+docs
+scripts

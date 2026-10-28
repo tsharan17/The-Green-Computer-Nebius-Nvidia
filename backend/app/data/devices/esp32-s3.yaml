@@ -1,0 +1,68 @@
+id: esp32-s3
+name: Espressif ESP32-S3 (2x LX7, 240 MHz)
+vendor: Espressif
+kind: mcu
+role: reference design for this class of chip (not measured)
+runtime_overhead_gb: 1.6384e-05
+usable_mem_fraction: 0.9
+eta_compute:
+  int8: 0.15
+  fp32: 0.1
+eta_memory: 0.5
+launch_overhead_s: 2.0833333333333333e-05
+weights_mem_gb: 0.008388608
+extras:
+  core_mhz: 240.0
+  flash_kb: 8192.0
+  sram_kb: 512.0
+  regulator_efficiency: 0.9
+peak_tflops:
+  int8: 0.00384
+  fp32: 0.00048
+mem_bw_gbs: 0.96
+mem_gb: 0.000524288
+idle_w: 0.001
+dyn_w_max: 0.19920000000000002
+mem_w_max: 0.049800000000000004
+leak_w_25c: 0.0025
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 100.0
+power_modes:
+- id: 100pct
+  name: 100% clock
+  cap_w: 0.25
+  freq_scale: 1.0
+  mem_scale: 1.0
+- id: 50pct
+  name: 50% clock
+  cap_w: 0.11622621298570349
+  freq_scale: 0.5
+  mem_scale: 0.75
+- id: 25pct
+  name: 25% clock
+  cap_w: 0.092578125
+  freq_scale: 0.25
+  mem_scale: 0.625
+cooling_options:
+- id: as_built
+  name: As built (your θJA)
+  r_th_k_per_w: 50.0
+  fan_w: 0.0
+  c_th_j_per_k: 0.5
+default_cooling: as_built
+sources:
+  peak_tflops: assumed
+  mem_bw_gbs: assumed
+  mem_gb: vendor_spec
+  weights_mem_gb: vendor_spec
+  power_model: vendor_spec
+  power_modes: assumed
+  thermal: vendor_spec
+notes: 'Eight int8 MACs/cycle on one core is a conservative reading of ESP-NN vector kernels (the S3 vector
+  unit peaks at 16). Flash 8 MB is board-dependent; PSRAM is not modelled. Wi-Fi/BLE power excluded. Throughput
+  = MHz x int8 MACs/cycle x 2, 15% achieved by default (kernel efficiency, assumed). SRAM bandwidth assumed
+  4 bytes/cycle. Flash holds weights, SRAM holds the largest layer''s activations. Clock steps, power
+  split and cooling are assumptions: refine with a measurement (Real measurements page).'
+verified: false
+alternative_candidate: true

@@ -1,0 +1,68 @@
+id: stm32h743
+name: STM32H743 (Cortex-M7, 480 MHz)
+vendor: STMicroelectronics
+kind: mcu
+role: reference design for this class of chip (not measured)
+runtime_overhead_gb: 1.6384e-05
+usable_mem_fraction: 0.9
+eta_compute:
+  int8: 0.15
+  fp32: 0.1
+eta_memory: 0.5
+launch_overhead_s: 1.0416666666666666e-05
+weights_mem_gb: 0.002097152
+extras:
+  core_mhz: 480.0
+  flash_kb: 2048.0
+  sram_kb: 1024.0
+  regulator_efficiency: 0.9
+peak_tflops:
+  int8: 0.00192
+  fp32: 0.00096
+mem_bw_gbs: 1.92
+mem_gb: 0.001048576
+idle_w: 0.005
+dyn_w_max: 0.26
+mem_w_max: 0.065
+leak_w_25c: 0.0033000000000000004
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 100.0
+power_modes:
+- id: 100pct
+  name: 100% clock
+  cap_w: 0.33
+  freq_scale: 1.0
+  mem_scale: 1.0
+- id: 50pct
+  name: 50% clock
+  cap_w: 0.1534186011411286
+  freq_scale: 0.5
+  mem_scale: 0.75
+- id: 25pct
+  name: 25% clock
+  cap_w: 0.122203125
+  freq_scale: 0.25
+  mem_scale: 0.625
+cooling_options:
+- id: as_built
+  name: As built (your θJA)
+  r_th_k_per_w: 50.0
+  fan_w: 0.0
+  c_th_j_per_k: 0.5
+default_cooling: as_built
+sources:
+  peak_tflops: assumed
+  mem_bw_gbs: assumed
+  mem_gb: vendor_spec
+  weights_mem_gb: vendor_spec
+  power_model: vendor_spec
+  power_modes: assumed
+  thermal: vendor_spec
+notes: '2 MB flash and about 1 MB RAM (not all contiguous or fast); ~330 mW running from datasheet current
+  figures x 3.3 V. CMSIS-NN typically reaches 1-2 MACs/cycle. Throughput = MHz x int8 MACs/cycle x 2,
+  15% achieved by default (kernel efficiency, assumed). SRAM bandwidth assumed 4 bytes/cycle. Flash holds
+  weights, SRAM holds the largest layer''s activations. Clock steps, power split and cooling are assumptions:
+  refine with a measurement (Real measurements page).'
+verified: false
+alternative_candidate: true

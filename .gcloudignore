@@ -1,0 +1,27 @@
+# What `gcloud run deploy --source .` uploads to Cloud Build. Keeps secrets, local data and build output out.
+# (Without this file gcloud would use .gitignore; this one is explicit on purpose.)
+.git
+.gitignore
+.claude/
+.github/
+
+# Secrets and local data: never upload
+.env
+.env.*
+**/.env.cloudrun
+*.db
+gc_data/
+**/server.key
+
+# Build output and caches: rebuilt inside the image
+**/.venv/
+**/node_modules/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+backend/app/static/
+bench/models/
+bench/variants/

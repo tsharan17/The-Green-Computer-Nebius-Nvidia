@@ -1,0 +1,52 @@
+id: nvidia-l4
+name: NVIDIA L4 (24 GB)
+vendor: NVIDIA
+kind: datacenter_gpu
+role: inference GPU, passive server card
+peak_tflops:
+  fp32: 30.3
+  fp16: 121.0
+  int8: 242.0
+mem_bw_gbs: 300.0
+mem_gb: 24.0
+idle_w: 12.0
+dyn_w_max: 39.0
+mem_w_max: 15.0
+leak_w_25c: 6.0
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 95.0
+power_modes:
+- id: 50w
+  name: 50 W cap
+  cap_w: 50.0
+  freq_scale: 0.7
+  mem_scale: 1.0
+- id: 72w
+  name: 72 W (stock)
+  cap_w: 72.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: server_low
+  name: Server airflow, low
+  r_th_k_per_w: 0.6
+  fan_w: 0.0
+  c_th_j_per_k: 400.0
+- id: server_high
+  name: Server airflow, high
+  r_th_k_per_w: 0.35
+  fan_w: 0.0
+  c_th_j_per_k: 400.0
+default_cooling: server_low
+sources:
+  peak_tflops: vendor_spec
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  power_modes: vendor_spec
+  power_model: assumed
+  thermal: assumed
+notes: 'Dense tensor-core figures (NVIDIA quotes 242/485 TFLOPS/TOPS WITH sparsity for fp16/int8; halved
+  here). Passive card: temperature depends entirely on chassis airflow.'
+verified: false
+alternative_candidate: true

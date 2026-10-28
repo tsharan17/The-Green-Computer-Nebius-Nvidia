@@ -1,0 +1,12 @@
+id: tiny-vww-mobilenet
+name: Visual wake words MobileNet 0.25 (MLPerf Tiny)
+task: person detection
+input_desc: 96x96 RGB
+params_m: 0.22
+gflops: 0.015
+n_layers: 29
+act_mb_fp32: 5.5
+baseline_accuracy: 0.85
+accuracy_metric: Visual Wake Words top-1
+sources: {params_m: vendor_spec, gflops: vendor_spec, act_mb_fp32: analytical, baseline_accuracy: vendor_spec}
+notes: "Approximate figures for the MobileNetV1 0.25 model at 96x96 used by MLPerf Tiny (about 7.5M MACs). Activation traffic is a hand estimate. Replace with your own export for real work."

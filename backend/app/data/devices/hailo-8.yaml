@@ -1,0 +1,52 @@
+id: hailo-8
+name: Hailo-8 (M.2, 26 TOPS)
+vendor: Hailo
+kind: accelerator
+role: vision accelerator module (needs a host)
+eta_compute:
+  int8: 0.3
+onchip_weights_mb: 100.0
+onchip_bw_gbs: 100.0
+extras:
+  host_link_gbs: 3.9
+peak_tflops:
+  int8: 26.0
+mem_bw_gbs: 3.9
+mem_gb: 8.0
+idle_w: 0.5
+dyn_w_max: 1.9500000000000002
+mem_w_max: 0.75
+leak_w_25c: 0.30000000000000004
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 105.0
+power_modes:
+- id: typical
+  name: Typical
+  cap_w: 3.5
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: module
+  name: M.2 module, small spreader
+  r_th_k_per_w: 12.0
+  fan_w: 0.0
+  c_th_j_per_k: 8.0
+- id: heatsink
+  name: Module with heatsink
+  r_th_k_per_w: 7.0
+  fan_w: 0.0
+  c_th_j_per_k: 25.0
+default_cooling: module
+sources:
+  peak_tflops: vendor_spec
+  mem_bw_gbs: assumed
+  mem_gb: assumed
+  power_model: assumed
+  thermal: assumed
+  power_modes: assumed
+notes: 26 TOPS int8 from Hailo. Published power figures conflict (about 2.5-3.5 W typical in vendor material,
+  up to about 8.65 W in some module datasheets); 3.5 W is used. Host link is PCIe Gen3 x4 (about 3.9 GB/s).
+  Weights assumed resident (see Hailo-8L note). Host memory and host CPU power are NOT included.
+verified: false
+alternative_candidate: true

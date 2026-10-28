@@ -1,0 +1,52 @@
+id: intel-core-ultra-7-258v
+name: Intel Core Ultra 7 258V (NPU 4)
+vendor: Intel
+kind: laptop_soc
+role: Lunar Lake laptop SoC, inference via OpenVINO on the NPU
+peak_tflops:
+  fp16: 24.0
+  int8: 48.0
+mem_bw_gbs: 136.0
+mem_gb: 32.0
+idle_w: 4.0
+dyn_w_max: 16.900000000000002
+mem_w_max: 6.5
+leak_w_25c: 2.6
+gamma: 2.5
+t_throttle_c: 100.0
+t_shutdown_c: 110.0
+power_modes:
+- id: quiet
+  name: 17 W
+  cap_w: 17.0
+  freq_scale: 0.65
+  mem_scale: 0.9
+- id: perf
+  name: 30 W
+  cap_w: 30.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: thin
+  name: Thin laptop
+  r_th_k_per_w: 2.0
+  fan_w: 0.0
+  c_th_j_per_k: 100.0
+- id: fan
+  name: Fan
+  r_th_k_per_w: 1.2
+  fan_w: 0.8
+  c_th_j_per_k: 100.0
+default_cooling: fan
+sources:
+  peak_tflops: assumed
+  mem_bw_gbs: assumed
+  mem_gb: vendor_spec
+  power_model: assumed
+  thermal: assumed
+  power_modes: assumed
+notes: Intel quotes 48 TOPS for NPU 4 (some material says 47); fp16 at half that is assumed. 136 GB/s
+  is OUR estimate from LPDDR5X-8533 on 128 bits (Intel does not publish it). The 67 TOPS GPU is not modelled
+  here.
+verified: false
+alternative_candidate: true

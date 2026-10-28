@@ -1,0 +1,33 @@
+id: jetson-orin-nx
+name: NVIDIA Jetson Orin NX 16GB
+vendor: NVIDIA
+kind: edge_soc
+role: edge target (analytical only until a board is measured)
+peak_tflops: {fp32: 1.9, fp16: 9.5, int8: 19.0}
+mem_bw_gbs: 102.4
+mem_gb: 16.0
+idle_w: 3.5
+dyn_w_max: 28.0
+mem_w_max: 6.0
+leak_w_25c: 1.5
+gamma: 2.5
+t_throttle_c: 90.0
+t_shutdown_c: 105.0
+power_modes:
+  - {id: 10W, name: 10 W, cap_w: 10, freq_scale: 0.35, mem_scale: 0.5}
+  - {id: 15W, name: 15 W, cap_w: 15, freq_scale: 0.53, mem_scale: 0.7}
+  - {id: 25W, name: 25 W, cap_w: 25, freq_scale: 0.76, mem_scale: 1.0}
+  - {id: MAXN, name: MAXN (40 W), cap_w: 40, freq_scale: 1.0, mem_scale: 1.0}
+cooling_options:
+  - {id: passive_small, name: Small passive heatsink, r_th_k_per_w: 2.6, fan_w: 0.0, c_th_j_per_k: 70}
+  - {id: passive_large, name: Large passive heatsink, r_th_k_per_w: 1.7, fan_w: 0.0, c_th_j_per_k: 160}
+  - {id: fan_heatsink, name: Heatsink with fan, r_th_k_per_w: 1.0, fan_w: 1.5, c_th_j_per_k: 160}
+default_cooling: passive_small
+sources:
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  power_modes: vendor_spec
+  peak_tflops: assumed
+  power_model: assumed
+  thermal: assumed
+notes: Same derivation notes as Orin Nano. Constants are assumptions pending calibration.

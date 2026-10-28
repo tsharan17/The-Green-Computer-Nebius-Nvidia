@@ -1,0 +1,57 @@
+id: coral-edge-tpu
+name: Google Coral Edge TPU (USB accelerator)
+vendor: Google
+kind: accelerator
+role: int8-only TFLite accelerator
+eta_compute:
+  int8: 0.35
+onchip_weights_mb: 8.0
+onchip_bw_gbs: 64.0
+extras:
+  host_link_gbs: 0.4
+peak_tflops:
+  int8: 4.0
+mem_bw_gbs: 0.4
+mem_gb: 8.0
+idle_w: 0.4
+dyn_w_max: 1.04
+mem_w_max: 0.4
+leak_w_25c: 0.16000000000000003
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 100.0
+power_modes:
+- id: std
+  name: Standard clock
+  cap_w: 1.5
+  freq_scale: 0.6
+  mem_scale: 0.8
+- id: max
+  name: Maximum clock
+  cap_w: 2.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: bare
+  name: Case only
+  r_th_k_per_w: 9.0
+  fan_w: 0.0
+  c_th_j_per_k: 6.0
+- id: heatsink
+  name: Case + airflow
+  r_th_k_per_w: 5.0
+  fan_w: 0.0
+  c_th_j_per_k: 10.0
+default_cooling: bare
+sources:
+  peak_tflops: vendor_spec
+  mem_bw_gbs: assumed
+  mem_gb: assumed
+  power_model: vendor_spec
+  thermal: assumed
+  power_modes: vendor_spec
+notes: '4 TOPS int8 and about 2 W from Google. Models larger than the roughly 8 MB of on-chip memory stream
+  their weights over USB (effective 0.4 GB/s assumed) and slow sharply: that cliff is modelled. Only int8
+  TFLite models compile for it. Host power not included.'
+verified: false
+alternative_candidate: true

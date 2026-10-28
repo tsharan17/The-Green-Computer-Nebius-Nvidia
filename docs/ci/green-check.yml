@@ -1,0 +1,32 @@
+# Copy to .github/workflows/green-check.yml in YOUR repository.
+# Checks, on every pull request, that the model and settings in your repo still meet the
+# requirements in greencomputer.yaml, and comments the result. TEMPLATE: written from GitHub's
+# documented syntax, not run by us; adjust the install line to where you get The Green Computer.
+name: green-check
+on:
+  pull_request:
+    paths: ["models/**", "greencomputer.yaml"]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install "git+https://github.com/YOUR-ORG/the-green-computer.git#subdirectory=backend"
+      # The result on the base branch is the reference for "did it regress?"
+      - uses: actions/checkout@v4
+        with: { ref: "${{ github.base_ref }}", path: base }
+      - run: gc check base/greencomputer.yaml --save base.json || true
+      - id: gate
+        run: |
+          set +e
+          gc check greencomputer.yaml --compare base.json --markdown pr.md
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+      - run: gh pr comment ${{ github.event.pull_request.number }} --body-file pr.md
+        env: { GH_TOKEN: "${{ github.token }}" }
+      # exit 0 = pass, 1 = fail or regressed, 2 = uncertain (needs a measurement)
+      - run: test "${{ steps.gate.outputs.code }}" != "1"

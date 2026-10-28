@@ -1,0 +1,12 @@
+id: yolov8m
+name: YOLOv8m
+task: object detection
+input_desc: 640x640 RGB
+params_m: 25.9
+gflops: 78.9
+n_layers: 96
+act_mb_fp32: 550.0
+baseline_accuracy: 0.502
+accuracy_metric: COCO mAP50-95
+sources: {params_m: vendor_spec, gflops: vendor_spec, act_mb_fp32: assumed, baseline_accuracy: vendor_spec}
+notes: Published params, FLOPs and mAP. Activation traffic is an estimate until the ONNX parser (Day 2).

@@ -1,0 +1,35 @@
+id: jetson-orin-nano
+name: NVIDIA Jetson Orin Nano 8GB
+vendor: NVIDIA
+kind: edge_soc
+role: edge target (analytical only until a board is measured)
+peak_tflops: {fp32: 1.7, fp16: 8.5, int8: 17.0}
+mem_bw_gbs: 102.0
+mem_gb: 8.0
+idle_w: 2.5
+dyn_w_max: 14.0
+mem_w_max: 5.0
+leak_w_25c: 1.0
+gamma: 2.5
+t_throttle_c: 90.0
+t_shutdown_c: 105.0
+power_modes:
+  - {id: 7W, name: 7 W, cap_w: 7, freq_scale: 0.35, mem_scale: 0.5}
+  - {id: 15W, name: 15 W, cap_w: 15, freq_scale: 0.70, mem_scale: 0.85}
+  - {id: MAXN, name: MAXN (25 W), cap_w: 25, freq_scale: 1.0, mem_scale: 1.0}
+cooling_options:
+  - {id: passive_small, name: Small passive heatsink, r_th_k_per_w: 4.0, fan_w: 0.0, c_th_j_per_k: 60}
+  - {id: passive_large, name: Large passive heatsink, r_th_k_per_w: 2.4, fan_w: 0.0, c_th_j_per_k: 140}
+  - {id: fan_heatsink, name: Heatsink with fan, r_th_k_per_w: 1.4, fan_w: 1.0, c_th_j_per_k: 140}
+default_cooling: passive_small
+sources:
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  power_modes: vendor_spec
+  peak_tflops: assumed
+  power_model: assumed
+  thermal: assumed
+notes: >-
+  Peak throughput is derived from vendor sparse TOPS (halved for dense, GPU share assumed).
+  Power and thermal constants are tuned so full-load power is near the mode cap; thermal
+  resistances are assumptions. Refine on measurement.

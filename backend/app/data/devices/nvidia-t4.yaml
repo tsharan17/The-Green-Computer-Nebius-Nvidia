@@ -1,0 +1,46 @@
+id: nvidia-t4
+name: NVIDIA T4 (16 GB)
+vendor: NVIDIA
+kind: datacenter_gpu
+role: previous-generation inference GPU, common in cloud
+peak_tflops:
+  fp32: 8.1
+  fp16: 65.0
+  int8: 130.0
+mem_bw_gbs: 320.0
+mem_gb: 16.0
+idle_w: 10.0
+dyn_w_max: 39.0
+mem_w_max: 15.0
+leak_w_25c: 6.0
+gamma: 2.5
+t_throttle_c: 85.0
+t_shutdown_c: 95.0
+power_modes:
+- id: 70w
+  name: 70 W (stock)
+  cap_w: 70.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: server_low
+  name: Server airflow, low
+  r_th_k_per_w: 0.6
+  fan_w: 0.0
+  c_th_j_per_k: 400.0
+- id: server_high
+  name: Server airflow, high
+  r_th_k_per_w: 0.35
+  fan_w: 0.0
+  c_th_j_per_k: 400.0
+default_cooling: server_low
+sources:
+  peak_tflops: vendor_spec
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  power_modes: vendor_spec
+  power_model: assumed
+  thermal: assumed
+notes: NVIDIA's T4 tensor figures are dense. Passive card; chassis airflow sets temperature.
+verified: false
+alternative_candidate: true

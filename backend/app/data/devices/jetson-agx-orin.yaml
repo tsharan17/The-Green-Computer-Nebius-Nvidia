@@ -1,0 +1,32 @@
+id: jetson-agx-orin
+name: NVIDIA Jetson AGX Orin 64GB
+vendor: NVIDIA
+kind: edge_soc
+role: edge target (analytical only until a board is measured)
+peak_tflops: {fp32: 5.3, fp16: 21.0, int8: 85.0}
+mem_bw_gbs: 204.8
+mem_gb: 64.0
+idle_w: 5.0
+dyn_w_max: 40.0
+mem_w_max: 12.0
+leak_w_25c: 3.0
+gamma: 2.5
+t_throttle_c: 90.0
+t_shutdown_c: 105.0
+power_modes:
+  - {id: 15W, name: 15 W, cap_w: 15, freq_scale: 0.32, mem_scale: 0.4}
+  - {id: 30W, name: 30 W, cap_w: 30, freq_scale: 0.60, mem_scale: 0.75}
+  - {id: 50W, name: 50 W, cap_w: 50, freq_scale: 0.85, mem_scale: 0.9}
+  - {id: MAXN, name: MAXN (60 W), cap_w: 60, freq_scale: 1.0, mem_scale: 1.0}
+cooling_options:
+  - {id: passive_large, name: Large passive heatsink, r_th_k_per_w: 1.2, fan_w: 0.0, c_th_j_per_k: 300}
+  - {id: fan_heatsink, name: Heatsink with fan, r_th_k_per_w: 0.7, fan_w: 3.0, c_th_j_per_k: 300}
+default_cooling: passive_large
+sources:
+  mem_bw_gbs: vendor_spec
+  mem_gb: vendor_spec
+  power_modes: vendor_spec
+  peak_tflops: assumed
+  power_model: assumed
+  thermal: assumed
+notes: MAXN (60 W) exceeds the default 55 W limit by design; use it to show certification.

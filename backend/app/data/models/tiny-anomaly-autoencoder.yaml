@@ -1,0 +1,13 @@
+id: tiny-anomaly-autoencoder
+name: Anomaly detection autoencoder (MLPerf Tiny)
+task: anomaly detection
+input_desc: 640 features
+params_m: 0.27
+gflops: 0.00054
+n_layers: 10
+act_mb_fp32: 0.02
+baseline_accuracy: 0.87
+accuracy_metric: ToyADMOS AUC
+resolution_scalable: false
+sources: {params_m: vendor_spec, gflops: vendor_spec, act_mb_fp32: analytical, baseline_accuracy: vendor_spec}
+notes: "Approximate figures for the dense autoencoder used by MLPerf Tiny (about 270k parameters). Activation traffic is a hand estimate."

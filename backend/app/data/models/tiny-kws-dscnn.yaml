@@ -1,0 +1,13 @@
+id: tiny-kws-dscnn
+name: Keyword spotting DS-CNN (MLPerf Tiny)
+task: keyword spotting
+input_desc: 49x10 MFCC
+params_m: 0.0386
+gflops: 0.0054
+n_layers: 12
+act_mb_fp32: 0.9
+baseline_accuracy: 0.92
+accuracy_metric: Speech Commands top-1
+resolution_scalable: false
+sources: {params_m: vendor_spec, gflops: vendor_spec, act_mb_fp32: analytical, baseline_accuracy: vendor_spec}
+notes: "Approximate figures for the DS-CNN small model used by MLPerf Tiny (about 38.6k parameters, about 2.7M MACs). Activation traffic is a hand estimate. Replace with your own ONNX/TFLite export for real work."

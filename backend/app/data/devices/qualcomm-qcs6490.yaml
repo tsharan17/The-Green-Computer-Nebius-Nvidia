@@ -1,0 +1,52 @@
+id: qualcomm-qcs6490
+name: Qualcomm QCS6490 (RB3 Gen 2 / Dragonwing)
+vendor: Qualcomm
+kind: edge_soc
+role: IoT / robotics SoC with a 12 TOPS Hexagon NPU
+peak_tflops:
+  fp32: 0.8
+  fp16: 1.6
+  int8: 12.0
+mem_bw_gbs: 25.6
+mem_gb: 8.0
+idle_w: 1.5
+dyn_w_max: 4.875
+mem_w_max: 1.875
+leak_w_25c: 0.75
+gamma: 2.5
+t_throttle_c: 95.0
+t_shutdown_c: 105.0
+power_modes:
+- id: low
+  name: Low power
+  cap_w: 5.0
+  freq_scale: 0.6
+  mem_scale: 0.8
+- id: default
+  name: Default
+  cap_w: 9.0
+  freq_scale: 1.0
+  mem_scale: 1.0
+cooling_options:
+- id: passive
+  name: Small heatsink
+  r_th_k_per_w: 5.0
+  fan_w: 0.0
+  c_th_j_per_k: 30.0
+- id: fan
+  name: Heatsink + fan
+  r_th_k_per_w: 2.5
+  fan_w: 0.8
+  c_th_j_per_k: 30.0
+default_cooling: passive
+sources:
+  peak_tflops: assumed
+  mem_bw_gbs: assumed
+  mem_gb: vendor_spec
+  power_model: assumed
+  thermal: assumed
+  power_modes: assumed
+notes: 12 TOPS is Qualcomm's headline NPU figure (int8). GPU figures and memory bandwidth are estimates;
+  power is a rough budget for a dev kit. Treat as order-of-magnitude.
+verified: false
+alternative_candidate: true

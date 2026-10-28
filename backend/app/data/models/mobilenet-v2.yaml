@@ -1,0 +1,12 @@
+id: mobilenet-v2
+name: MobileNetV2
+task: image classification
+input_desc: 224x224 RGB
+params_m: 3.5
+gflops: 0.6
+n_layers: 53
+act_mb_fp32: 54.0
+baseline_accuracy: 0.719
+accuracy_metric: ImageNet top-1
+sources: {params_m: vendor_spec, gflops: vendor_spec, act_mb_fp32: analytical, baseline_accuracy: vendor_spec}
+notes: "Published params, FLOPs and top-1. Activation traffic is derived by the ONNX parser from the reference architecture graph (bench/reference_models.py): it reproduces the published parameter and FLOP counts."
